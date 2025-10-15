@@ -1,5 +1,5 @@
 {
-  "name": "incubyte-react-a11y-project",
+  "name": "string_calculator",
   "private": false,
   "version": "0.0.0",
   "type": "module",
@@ -8,7 +8,9 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "test": "vitest",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "license": "MIT",
   "author": "Incubyte",
@@ -19,12 +21,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/incubyte/incubyte-react-a11y-project.git"
+    "url": "https://github.com/iqram3/string_calculator.git"
   },
   "bugs": {
-    "url": "https://github.com/incubyte/incubyte-react-a11y-project/issues"
+    "url": "https://github.com/iqram3/string_calculator/issues"
   },
-  "homepage": "https://github.com/incubyte/incubyte-react-a11y-project",
+  "homepage": "https://github.com/iqram3/string_calculator",
   "dependencies": {
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
