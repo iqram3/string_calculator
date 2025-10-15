@@ -1,47 +1,135 @@
-import { useState } from 'react';
+import { useState, useRef } from "react";
+import { stringCalculator } from "./stringCalculator";
 
 const App = () => {
-  const [input, setInput] = useState('');
-  const [result] = useState(null);
+  const [input, setInput] = useState("");
+  const [result, setResult] = useState<number | null>(null);
+  const [error, setError] = useState("");
+  const resultRef = useRef<HTMLParagraphElement | null>(null);
 
-  const handleCalculate = () => {};
+  const handleCalculate = () => {
+    try {
+      const res = stringCalculator(input);
+      setResult(res);
+      setError("");
+      setTimeout(() => resultRef.current?.focus(), 100);
+    } catch (err: any) {
+      setError(err.message);
+      setResult(null);
+    }
+  };
 
   return (
-    <div style={{ padding: '20px', backgroundColor: '#fff', color: '#aaa' }}>
+    <main
+      style={{
+        padding: "20px",
+        backgroundColor: "#fff",
+        color: "#222",
+        maxWidth: 600,
+        margin: "0 auto",
+        fontFamily: "Arial, sans-serif",
+      }}
+      aria-label="String Calculator Application"
+    >
+      <header>
+        <h1 tabIndex={0}>String Calculator</h1>
+      </header>
+
       <img
-        src='https://images.unsplash.com/photo-1594352161389-11756265d1b5?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+        src="https://images.unsplash.com/photo-1594352161389-11756265d1b5?q=80&w=2574&auto=format&fit=crop"
         width={600}
         height={400}
+        alt="A workspace background with a calculator and notes"
+        style={{ borderRadius: "8px", marginBottom: "10px" }}
       />
 
-      <h2>String Calculator</h2>
-
-      <h1 style={{ fontSize: '20px' }}>Enter numbers</h1>
+      <label htmlFor="number-input" style={{ fontSize: "18px" }}>
+        Enter numbers
+      </label>
 
       <textarea
-        style={{ margin: '10px 0', color: '#aaa' }}
-        placeholder='Enter numbers'
+        id="number-input"
+        style={{
+          margin: "10px 0",
+          width: "100%",
+          minHeight: "100px",
+          border: "1px solid #ccc",
+          borderRadius: "4px",
+          padding: "8px",
+          fontSize: "16px",
+          outlineColor: "#008cba",
+        }}
+        placeholder="e.g. 1,2,3 or //;\n1;2"
         value={input}
         onChange={(e) => setInput(e.target.value)}
+        aria-describedby="input-help"
+        aria-label="Enter numbers to calculate the sum"
       />
 
-      <div
+      <div id="input-help" style={{ fontSize: "14px", color: "#555" }}>
+        Separate numbers using commas or newlines. You can also define custom
+        delimiters like <code>//;\n1;2</code>.
+      </div>
+
+      <button
         onClick={handleCalculate}
         style={{
-          padding: '10px',
-          backgroundColor: '#008cba',
-          color: '#fff',
-          border: 'none',
-        }}>
+          padding: "10px 20px",
+          backgroundColor: "#008cba",
+          color: "#fff",
+          border: "none",
+          borderRadius: "4px",
+          cursor: "pointer",
+          marginTop: "10px",
+        }}
+        onKeyDown={(e) => e.key === "Enter" && handleCalculate()}
+      >
         Calculate
-      </div>
+      </button>
 
-      {result !== null && <p style={{ color: 'green' }}>Result: {result}</p>}
+      {result !== null && (
+        <p
+          ref={resultRef}
+          role="status"
+          tabIndex={-1}
+          style={{
+            color: "green",
+            marginTop: "15px",
+            fontWeight: "bold",
+            outline: "none",
+          }}
+        >
+          Result: {result}
+        </p>
+      )}
 
-      <div role='alert'>
-        <p>Make sure you enter numbers correctly!</p>
-      </div>
-    </div>
+      {error && (
+        <div
+          role="alert"
+          tabIndex={-1}
+          style={{
+            color: "red",
+            marginTop: "15px",
+            fontWeight: "bold",
+            outline: "none",
+          }}
+        >
+          {error}
+        </div>
+      )}
+
+      <footer style={{ marginTop: "20px", fontSize: "14px", color: "#555" }}>
+        <p>Keyboard shortcuts:</p>
+        <ul>
+          <li>
+            Use <kbd>Tab</kbd> to navigate between fields
+          </li>
+          <li>
+            Press <kbd>Enter</kbd> on the “Calculate” button
+          </li>
+        </ul>
+      </footer>
+    </main>
   );
 };
 
